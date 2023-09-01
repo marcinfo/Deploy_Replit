@@ -3,27 +3,22 @@
 {% block title %}Log-in{% endblock %}
 
 {% block content %}
-  <h1>Log-in</h1>
-
+  <h1>Entrar</h1>
   {% if form.errors %}
     <p>
-      Your username and password didn't match.
-      Please try again.
+      O nome de usuário ou senha não correspondem.
+      Por favor, tente novamente.
     </p>
   {% else %}
-    <p>Please, use the following form to log-in. If you don't have an account <a>register here</a></p>
+    <p>Por favor, use o esse formulário para fazer o login. Se você não tem uma conta, <a href="{% url "register" %}">registre aqui</a></p>
   {% endif %}
   <div class="login-form">
     <form action="{% url 'login' %}" method="post">
       {{ form.as_p }}
       {% csrf_token %}
       <input type="hidden" name="next" value="{{ next }}" />
-      <p><input type="submit" value="Log-in"></p>
+      <p><input type="submit" value="Entrar"></p>
     </form>
-    <p><a href="{% url "password_reset" %}">Forgotten your password?</a></p>
-  </div>
-  <div class="social">
-
-    </ul>
+    <p><a href="{% url "password_reset" %}">Esqueci a minha senha?</a></p>
   </div>
 {% endblock %}

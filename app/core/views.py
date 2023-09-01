@@ -6,7 +6,16 @@ from django.contrib import messages
 from .models import Profile
 from .forms import LoginForm, UserRegistrationForm, \
                    UserEditForm, ProfileEditForm
-
+from datetime import datetime
+from dateutil.relativedelta import relativedelta
+import pandas as pd
+from dateutil.parser import parse
+import folium
+import requests
+import json
+import socket
+from django.shortcuts import get_object_or_404
+from urllib.parse import urlparse
 
 def user_login(request):
     if request.method == 'POST':
@@ -79,3 +88,45 @@ def edit(request):
                   'core/edit.html',
                   {'user_form': user_form,
                    'profile_form': profile_form})
+
+
+
+def index(request):
+
+    url = 'https://covid19-brazil-api.now.sh/api/report/v1/brazil/uf/sp'
+    headers = {}
+    response = requests.request('GET', url, headers=headers)
+    dados_covid = json.loads(response.content)
+    dados_covid['datetime'] = pd.to_datetime(dados_covid['datetime'])
+
+    url2 = 'https://covid19-brazil-api.now.sh/api/report/v1/brazil'
+    headers = {}
+    response2 = requests.request('GET', url2, headers=headers)
+    dados_covid2 = json.loads(response2.content)
+    print(dados_covid2)
+    print(dados_covid)
+
+    return render(request, 'core/index.html', {'dados_covid': dados_covid,'dados_covid2': dados_covid2})
+
+def Mostra_Mapa(request):
+    l1 = "-23.547169"
+    l2 = "-46.636719"
+    ## getting the hostname by socket.gethostname() method
+    hostname = socket.gethostname()
+    ## getting the IP address using socket.gethostbyname() method
+    ip_address = socket.gethostbyname(hostname)
+    ## printing the hostname and ip_address
+    print(f"Hostname: {hostname}")
+    print(f"IP Local: {ip_address}")
+    ip_address2="187.94.185.34"
+    print(f"IP Address: {ip_address2}")
+    ip = requests.get('https://api.ipify.org/')
+    response = requests.post(f"http://ip-api.com/json/{ip_address}").json()
+    print(response)
+    if (response['status'] !='fail'):
+        l1 = response['lat']
+        l2 = response['lon']
+
+
+    m = folium.Map(location=[l1, l2], zoom_start=14, control_scale=True, width=1090, height=450)
+    folium.Marker(location=[float(l1), float(l2)]).add_to(m)
