@@ -12,9 +12,9 @@
          <li {% if section == "index" %}class="selected"{% endif %}>
               <a href="{% url "index" %}">Inicio</a>
         </li>
-          <li {% if section == "mapa" %}class="selected"{% endif %}>
-              <a href="{% url "mapa" %}">Mapa</a>
-          </li>
+        <li {% if section == "mapa" %}class="selected"{% endif %}>
+            <a href="{% url "mapa" %}">Mapa</a>
+        </li>
 
        </ul>
     {% if request.user.is_authenticated %}
@@ -22,7 +22,6 @@
       <li {% if section == "dashboard" %}class="selected"{% endif %}>
         <a href="{% url "dashboard" %}">Minha Conta</a>
       </li>
-
 
     </ul>
   {% endif %}
