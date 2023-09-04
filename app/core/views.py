@@ -3,7 +3,7 @@ from django.shortcuts import render
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .models import Profile
+from .models import Profile,Tb_Registros
 from .forms import LoginForm, UserRegistrationForm, \
                    UserEditForm, ProfileEditForm
 from datetime import datetime
@@ -16,6 +16,7 @@ import json
 import socket
 from django.shortcuts import get_object_or_404
 from urllib.parse import urlparse
+from geopy import distance
 
 def user_login(request):
     if request.method == 'POST':
@@ -93,40 +94,56 @@ def edit(request):
 
 def index(request):
 
-    url = 'https://covid19-brazil-api.now.sh/api/report/v1/brazil/uf/sp'
-    headers = {}
-    response = requests.request('GET', url, headers=headers)
-    dados_covid = json.loads(response.content)
-    dados_covid['datetime'] = pd.to_datetime(dados_covid['datetime'])
-
-    url2 = 'https://covid19-brazil-api.now.sh/api/report/v1/brazil'
-    headers = {}
-    response2 = requests.request('GET', url2, headers=headers)
-    dados_covid2 = json.loads(response2.content)
-    print(dados_covid2)
-    print(dados_covid)
-
-    return render(request, 'core/index.html', {'dados_covid': dados_covid,'dados_covid2': dados_covid2})
-
-def Mostra_Mapa(request):
-    l1 = "-23.547169"
-    l2 = "-46.636719"
-    ## getting the hostname by socket.gethostname() method
-    hostname = socket.gethostname()
-    ## getting the IP address using socket.gethostbyname() method
-    ip_address = socket.gethostbyname(hostname)
-    ## printing the hostname and ip_address
-    print(f"Hostname: {hostname}")
-    print(f"IP Local: {ip_address}")
-    ip_address2="187.94.185.34"
-    print(f"IP Address: {ip_address2}")
-    ip = requests.get('https://api.ipify.org/')
-    response = requests.post(f"http://ip-api.com/json/{ip_address}").json()
-    print(response)
-    if (response['status'] !='fail'):
-        l1 = response['lat']
-        l2 = response['lon']
 
 
-    m = folium.Map(location=[l1, l2], zoom_start=14, control_scale=True, width=1090, height=450)
+    return render(request, 'core/index.html')
+
+
+def mostra_ocorrencia(request):
+    l1 = " -15.793889"
+    l2 = " -47.882778"
+    lat_get = request.GET.get('lat')
+    lon_get = request.GET.get('lon')
+    zoom = 4
+    loc_usuario = 'centralizado em Brasilia.'
+    if (lat_get != None) & (lon_get != None):
+        latitude = str(lat_get)
+        longitude = str(lon_get)
+        l1 = latitude
+        l2 = longitude
+        zoom = 9
+        loc_usuario='Você esta aqui!'
+    else:
+        l1 = l1
+        l2 = l2
+    ocorrencias = Tb_Registros.objects.all().values()
+    geo_loc_ocorrencias = pd.DataFrame(ocorrencias)
+    lista_distancia = []
+    for _, dis in geo_loc_ocorrencias.iterrows():
+        distan = distance.distance((l1, l2), [float(dis['latitude']), dis['longitude']]).km
+        distan = float(distan)
+        distan = round(distan,1)
+        lista_distancia += [distan]
+    geo_loc_ocorrencias['distancia'] = lista_distancia
+    geo_loc_ocorrencias = geo_loc_ocorrencias.nsmallest(100, 'distancia')
+    geo_loc_ocorrencias['poupup']= ' data '+geo_loc_ocorrencias['data_registro']+' '+geo_loc_ocorrencias['relato']+ \
+                      ' '+geo_loc_ocorrencias['observacao']+ ' distancia=  '+geo_loc_ocorrencias['distancia'].map(str) +'km'
+
+    m = folium.Map(location=[l1, l2], zoom_start=zoom, control_scale=True, width=1090, height=450)
     folium.Marker(location=[float(l1), float(l2)]).add_to(m)
+    for _, ocor  in geo_loc_ocorrencias.iterrows():
+
+        folium.Marker(
+            location=[ocor['latitude'], ocor['longitude']], popup=ocor['poupup'],
+        ).add_to(m)
+    folium.Marker(
+        location=[l1, l2], popup=loc_usuario, icon=folium.Icon(color='green', icon='ok-circle'), ).add_to(m)
+    context = {
+        'vacin': 'Veja as ocorrencias mais proximas da sua localização.',
+        'm': m._repr_html_()
+    }
+
+    print(lista_distancia )
+
+
+    return render(request, 'core/mapa.html',context)

@@ -8,15 +8,22 @@
 <body>
   <div id="header">
     <span class="logo">Base para App</span>
+       <ul class="menu">
+         <li {% if section == "index" %}class="selected"{% endif %}>
+              <a href="{% url "index" %}">Inicio</a>
+        </li>
+          <li {% if section == "mapa" %}class="selected"{% endif %}>
+              <a href="{% url "mapa" %}">Mapa</a>
+          </li>
+
+       </ul>
     {% if request.user.is_authenticated %}
     <ul class="menu">
       <li {% if section == "dashboard" %}class="selected"{% endif %}>
-        <a href="{% url "dashboard" %}">My dashboard</a>
+        <a href="{% url "dashboard" %}">Minha Conta</a>
       </li>
 
-      <li {% if section == "mapa" %}class="selected"{% endif %}>
-        <a href="{% url "mapa" %}">Mapa</a>
-      </li>
+
     </ul>
   {% endif %}
   <span class="user">
