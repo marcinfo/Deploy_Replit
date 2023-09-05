@@ -16,29 +16,31 @@ class Profile(models.Model):
 
 class Tb_Registros(models.Model):
     id_ocorrencia = models.AutoField(primary_key=True)
-    usuario =  models.CharField(max_length=45,null=True)
-    data_registro =  models.CharField(max_length=45,null=True)
-    relato = models.CharField(max_length=45)
-    Nome_propriedade = models.CharField(max_length=60,blank=True)
-    prejuizo=models.DecimalField(max_digits=8, decimal_places=2)
-    hectares=models.CharField(max_length=4,null=True)
-    rebanho= models.IntegerField(blank=True,null=True)
+    usuario =  models.CharField(name='Usuário',max_length=45,null=True)
+    data_registro =  models.DateField(name='Data da Ocorrência')
+    relato = models.CharField(name='Tipo de Praga',max_length=45)
+    cultura =  models.CharField(name='Cultura',max_length=45)
+    Nome_propriedade = models.CharField(name='Nome da Propriedade afetada',max_length=60,blank=True)
+    prejuizo=models.DecimalField(name='Total do prejuizo R$',max_digits=20, decimal_places=2)
+    hectares=models.CharField(name='Quantidade de hectar afetado',max_length=4,null=True)
+
     latitude = models.CharField(max_length=45)
     longitude = models.CharField(max_length=45)
-    observacao = models.TextField()
+    observacao = models.TextField(name='Observações')
     class Meta:
 
         verbose_name = "Tabela de Registro"
         verbose_name_plural = "Tabela de Registros"
 
-class Tb_Pragas(models.Model):
+
+
+class TbPragas(models.Model):
     id_praga = models.AutoField(primary_key=True)
-    cultura =  models.CharField(max_length=45,null=True)
-    espécie_valida =  models.CharField(max_length=45,null=True)
+    cultura = models.CharField(max_length=45, blank=True, null=True)
+    especie = models.CharField(max_length=45, blank=True, null=True)
     nome_comum = models.CharField(max_length=45)
     nome_comum2 = models.CharField(max_length=45)
 
     class Meta:
-
-        verbose_name = "Tabela de Praga"
-        verbose_name_plural = "Tabela de Pragas"
+        verbose_name = "TbPraga"
+        verbose_name_plural = "TbPragas"

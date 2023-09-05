@@ -320,7 +320,7 @@ img.user-detail {
   padding: 20px;
   margin: 30px;
   width: 400px;
-  height:80px;
+  height:45px;
   transition: all 0.3s ease-out;
 }
 
@@ -331,7 +331,7 @@ img.user-detail {
 
 .card p {
   /*color: #a3a5ae;*/
-  font-size: 18px;
+  font-size: 14px;
  font-weight: bolder;
   text-align: center;
 }
