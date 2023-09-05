@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+import locale
 import requests
 from django.contrib.auth import authenticate, login
 class Profile(models.Model):
@@ -19,7 +20,7 @@ class Tb_Registros(models.Model):
     data_registro =  models.CharField(max_length=45,null=True)
     relato = models.CharField(max_length=45)
     Nome_propriedade = models.CharField(max_length=60,blank=True)
-    prejuizo=models.FloatField(max_length=60,null=True)
+    prejuizo=models.DecimalField(max_digits=8, decimal_places=2)
     hectares=models.CharField(max_length=4,null=True)
     rebanho= models.IntegerField(blank=True,null=True)
     latitude = models.CharField(max_length=45)

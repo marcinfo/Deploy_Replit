@@ -93,11 +93,15 @@ def edit(request):
 
 
 def index(request):
+    registros = Tb_Registros.objects.all().values()
+    reg_ocorrencias = pd.DataFrame(registros)
+    total=reg_ocorrencias['relato'].count()
+    total_prejuizo = reg_ocorrencias['prejuizo'].sum()
+    print(total_prejuizo)
 
 
 
-    return render(request, 'core/index.html')
-
+    return render(request, 'core/index.html', {'total': total,'total_prejuizo':total_prejuizo})
 
 def mostra_ocorrencia(request):
     l1 = " -15.793889"
