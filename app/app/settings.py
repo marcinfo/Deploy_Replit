@@ -27,6 +27,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'stdimage',
 ]
 
 MIDDLEWARE = [
@@ -122,5 +123,5 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 LOGIN_REDIRECT_URL = 'index'
 LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
-
+LOGOUT_REDIRECT_URL = 'index'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
