@@ -9,7 +9,7 @@ class ProfileAdmin(admin.ModelAdmin):
 
 @admin.register(Tb_Registros)
 class Tb_OcorrenciasAdmin(admin.ModelAdmin):
-    list_display = ['id_ocorrencia', 'Data da Ocorrência','Cultura', 'Tipo de Praga', 'Nome da Propriedade afetada', \
+    list_display = ['id_ocorrencia', 'Data da Ocorrência','Cultura', 'Tipo de Praga', 'Nome da Propriedade afetada',
                     'Quantidade de hectar afetado', 'Total do prejuizo R$', 'latitude', 'longitude', 'Observações']
     search_fields = ('id_ocorrencia', 'Tipo de Praga')
     ordering = ['Tipo de Praga']
@@ -17,4 +17,4 @@ class Tb_OcorrenciasAdmin(admin.ModelAdmin):
 
 @admin.register(TbPragas)
 class TbPragasAdmin(admin.ModelAdmin):
-    list_display = ['id_praga', 'cultura','especie', 'nome_comum', 'nome_comum2']
+    list_display = [ 'cultura','especie', 'nome_comum', 'nome_comum2']

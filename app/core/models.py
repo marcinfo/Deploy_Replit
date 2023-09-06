@@ -55,5 +55,6 @@ class TbPragas(models.Model):
     nome_comum2 = models.CharField(max_length=45)
 
     class Meta:
+
         verbose_name = "TbPraga"
         verbose_name_plural = "TbPragas"
