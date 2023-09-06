@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .models import Profile,Tb_Registros
 from .forms import LoginForm, UserRegistrationForm, \
-                   UserEditForm, ProfileEditForm,Tb_RegistrosModelForm
+                   UserEditForm, ProfileEditForm,RegistrosModelForm
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 import pandas as pd
@@ -106,24 +106,25 @@ def index(request):
     return render(request, 'core/index.html', {'total': total,'total_prejuizo':total_prejuizo,'tipo_praga':tipo_praga,\
                                                'total_hectares':total_hectares,'tipo_cultura':tipo_cultura})
 
-def cadastrar(request):
-    if str(request.method) == 'POST':
-        form = Tb_RegistrosModelForm(request.POST, request.FILES)
-        if form.is_valid():
-            cad = form.save(commit=False)
-            print(f'praga:{cad.Usuário}')
-            print(request.user.username)
-            messages.success(request, 'Ocorrência salva com sucesso!')
-        else:
-            messages.error(request, 'Erro ao salvar!')
-            form = Tb_RegistrosModelForm()
+def cadastrarForm(request):
+    if request.method == "GET":
+        form=RegistrosModelForm()
+        context={
+            'form': form
+        }
+        return render(request, 'core/cadastrar.html',context=context)
     else:
-        form = Tb_RegistrosModelForm()
-    context={
-        'form':form
-    }
+        form = RegistrosModelForm(request.POST)
+        if form.is_valid():
+            registro = form.save()
+            form = RegistrosModelForm()
 
-    return render(request, 'core/cadastrar.html',context)
+
+
+        context = {
+            'form':form
+        }
+        return render(request, 'core/cadastrar.html', context=context)
 
 
 def mostra_ocorrencia(request):

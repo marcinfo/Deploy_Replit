@@ -6,18 +6,16 @@
 {% block content %}
 <html>
 <body>
- <div  align = "center">
-  <h1>Cadastro</h1>
-  <form method="post" class="form" enctype="multipart/form-data">
 
 
-   {{ Tb_RegistrosModelForm.as_p }}
+  <form action="." method="post" class="form" enctype="multipart/form-data">
     {% csrf_token %}
+   {{ form.as_p }}
    <p><input type="submit" value="Savar"></p>
 
   </form>
 
- </div>
+
 
 </body>
 </html>
