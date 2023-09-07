@@ -92,14 +92,14 @@ def index(request):
     contador =registros.count()
     if contador != 0:
         reg_ocorrencias = pd.DataFrame(registros)
-
+        maior_frequencia = reg_ocorrencias
         total=reg_ocorrencias['id_ocorrencia'].count()
         total_prejuizo = reg_ocorrencias['Total do prejuizo R$'].sum()
         total_hectares = reg_ocorrencias['Quantidade de hectar afetado'].sum()
         tipo_praga=reg_ocorrencias.groupby('Tipo de Praga')['Tipo de Praga'].unique().count()
         tipo_cultura = reg_ocorrencias.groupby('Cultura')['Cultura'].unique().count()
-        maior_frequencia = reg_ocorrencias[['Tipo de Praga']]
-        maior_frequencia = maior_frequencia.groupby('Tipo de Praga')['Tipo de Praga'].transform('count')
+
+
         print(maior_frequencia)
 
         return render(request, 'core/index.html',
@@ -114,9 +114,6 @@ def index(request):
 
 
 def cadastrarForm(request):
-
-
-
 
     if request.method == "GET":
         form=RegistrosModelForm()
