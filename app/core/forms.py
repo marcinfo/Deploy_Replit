@@ -41,5 +41,6 @@ class ProfileEditForm(forms.ModelForm):
 class RegistrosModelForm(forms.ModelForm):
     class Meta:
         model = Tb_Registros
-        fields = "__all__"
+        fields = ('Nome da Propriedade afetada','Cultura','Tipo de Praga','Data da Ocorrência','status','Total do prejuizo R$',
+                  'Quantidade de hectar afetado','latitude','longitude','imagem','Observações')
 
