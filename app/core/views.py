@@ -3,19 +3,14 @@ from django.shortcuts import render
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .models import Profile,Tb_Registros
+from .models import Profile,Tb_Registros,TbPragas
 from .forms import LoginForm, UserRegistrationForm, \
                    UserEditForm, ProfileEditForm,RegistrosModelForm
-from datetime import datetime
-from dateutil.relativedelta import relativedelta
+
 import pandas as pd
-from dateutil.parser import parse
+
 import folium
-import requests
-import json
-import socket
-from django.shortcuts import get_object_or_404
-from urllib.parse import urlparse
+
 from geopy import distance
 
 def user_login(request):
@@ -119,6 +114,10 @@ def index(request):
 
 
 def cadastrarForm(request):
+
+
+
+
     if request.method == "GET":
         form=RegistrosModelForm()
         context={

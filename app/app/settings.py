@@ -20,6 +20,7 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
+
     'core.apps.CoreConfig',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -28,8 +29,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'stdimage',
-]
+    'crispy_forms',
+'crispy_bootstrap4',
 
+]
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -125,3 +129,4 @@ LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
 LOGOUT_REDIRECT_URL = 'index'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+CRISPY_TEMPLATE_PACK = 'bootstrap4'

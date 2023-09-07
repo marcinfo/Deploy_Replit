@@ -1,5 +1,18 @@
 @import url(//fonts.googleapis.com/css?family=Muli);
 
+//style.css
+body {
+  background-color: #444442;
+  padding-top: 30px;
+}
+
+h1 {
+  font-family: 'Poppins', sans-serif, 'arial'; //estilo de fonte
+  font-weight: 600; //peso da fonte
+  font-size: 48px; //tamanho da fonte
+  color: white;
+  text-align: center;
+}
 /* Add rounded corners to the top left and the top right corner of the image */
 img {
   border-radius: 5px 5px 0 0;
