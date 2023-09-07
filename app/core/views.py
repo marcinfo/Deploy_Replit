@@ -100,11 +100,11 @@ def index(request):
         tipo_cultura = reg_ocorrencias.groupby('Cultura')['Cultura'].unique().count()
         maior_frequencia = reg_ocorrencias[['Tipo de Praga']]
         maior_frequencia = maior_frequencia.groupby('Tipo de Praga')['Tipo de Praga'].transform('count')
-        maior_frequencia = maior_frequencia.nlargest(1, 'Freq')
         print(maior_frequencia)
+
         return render(request, 'core/index.html',
                       {'total': total, 'total_prejuizo': total_prejuizo, 'tipo_praga': tipo_praga, \
-                       'total_hectares': total_hectares, 'tipo_cultura': tipo_cultura, 'duplicas': duplicas})
+                       'total_hectares': total_hectares, 'tipo_cultura': tipo_cultura})
 
     else:
         print(contador)

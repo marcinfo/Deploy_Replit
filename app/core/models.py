@@ -49,7 +49,7 @@ class Tb_Registros(Base):
     status = models.CharField(verbose_name='Controlada?', max_length=45, choices=CONTROLE_CHOICE,help_text='A praga esta controlada?')
     Nome_propriedade = models.CharField(name='Nome da Propriedade afetada',max_length=60,help_text='Nome da propriedade que esta sendo contaminada.')
     prejuizo=models.DecimalField(name='Total do prejuizo R$',max_digits=20, decimal_places=2,default=0.0,help_text='qual o valor do prejuizo?')
-    hectares=models.IntegerField(name='Quantidade de hectar afetado',max_length=40,default=0,help_text='quantos hectares estão contaminados')
+    hectares=models.IntegerField(name='Quantidade de hectar afetado',default=0,help_text='quantos hectares estão contaminados')
     latitude = models.CharField(max_length=45)
     longitude = models.CharField(max_length=45)
     imagem = StdImageField('Imagem',upload_to='images',help_text='Selecione as imagens da praga.',null=True,blank=True)
