@@ -8,7 +8,7 @@ from .forms import LoginForm, UserRegistrationForm, \
                    UserEditForm, ProfileEditForm,RegistrosModelForm
 
 import pandas as pd
-
+from django.db.models import Avg,Count,Max
 import folium
 
 from geopy import distance
@@ -88,23 +88,28 @@ def edit(request):
 
 
 def index(request):
-    registros = Tb_Registros.objects.all().values()
+    registros = Tb_Registros.objects.select_related('praga').all().values()
+
+
     contador =registros.count()
     if contador != 0:
+        cultura_afetada = Tb_Registros.objects.values('Cultura').annotate(total=Count('Cultura')).order_by("-Cultura")
+        praga_afetada = Tb_Registros.objects.values('praga').annotate(total=Count('praga')).order_by("-total")
+
+
         reg_ocorrencias = pd.DataFrame(registros)
         maior_frequencia = reg_ocorrencias
         total=reg_ocorrencias['id_ocorrencia'].count()
         total_prejuizo = reg_ocorrencias['Total do prejuizo R$'].sum()
         total_hectares = reg_ocorrencias['Quantidade de hectar afetado'].sum()
-        tipo_praga=reg_ocorrencias.groupby('Tipo de Praga')['Tipo de Praga'].unique().count()
+        tipo_praga=reg_ocorrencias.groupby('praga')['praga'].unique().count()
         tipo_cultura = reg_ocorrencias.groupby('Cultura')['Cultura'].unique().count()
-
-
-        print(maior_frequencia)
-
-        return render(request, 'core/index.html',
-                      {'total': total, 'total_prejuizo': total_prejuizo, 'tipo_praga': tipo_praga, \
-                       'total_hectares': total_hectares, 'tipo_cultura': tipo_cultura})
+        praga_afetada=total
+        context = {
+            'total': total, 'total_prejuizo': total_prejuizo, 'tipo_praga': tipo_praga,'total_hectares': total_hectares,
+            'praga_afetada':praga_afetada,'tipo_cultura': tipo_cultura
+        }
+        return render(request, 'core/index.html',context)
 
     else:
         print(contador)
@@ -191,3 +196,4 @@ def mostra_ocorrencia(request):
         print(contador)
         messages.info(request,'Não existem informações para exibir!')
         return render(request, 'core/mapa.html')
+

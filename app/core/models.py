@@ -3,16 +3,6 @@ from django.conf import settings
 from stdimage import StdImageField
 
 
-CULTURAS_CHOICE =(
-    ("Milho",'MILHO'),
-    ("Arroz","ARROZ"),
-    ("Soja","SOJA"),
-)
-PRAGAS_CHOICE=(
-    ("Formiga-rapa-rapa",'Formiga-rapa-rapa'),
-    ("Mancha-circular","Mancha-circular"),
-    ("Larva-arame","Larva-arame"),
-)
 CONTROLE_CHOICE=(
     ("s",'Sim'),
     ("N","Não"),
@@ -40,12 +30,33 @@ class Profile(models.Model):
 
 
 
+
+
+class TbPragas(models.Model):
+    id_praga = models.AutoField(primary_key=True)
+    cultura = models.CharField(max_length=45, blank=True, null=True)
+    especie = models.CharField(max_length=45, blank=True, null=True)
+    nome_comum = models.CharField(max_length=45)
+    nome_comum2 = models.CharField(max_length=45)
+
+    class Meta:
+
+        verbose_name = "Tabela de Praga"
+        verbose_name_plural = "Tabela de Pragas"
+
+
+lista_praga = TbPragas.objects.select_related('nome_comum').values_list('nome_comum', 'nome_comum').order_by(
+    "nome_comum").distinct()
+
+lista_cultura = TbPragas.objects.select_related('cultura').values_list('cultura', 'cultura').order_by(
+    "cultura").distinct()
+
 class Tb_Registros(Base):
     id_ocorrencia = models.AutoField(primary_key=True)
     usuario =  models.CharField(name='Usuário',max_length=45)
     data_registro =  models.DateField(name='Data da Ocorrência',help_text='Data em que foi visualizada a praga.')
-    relato = models.CharField(name='Tipo de Praga',max_length=40,choices=PRAGAS_CHOICE,help_text='Selecione qual o tipo de praga esta contaminando.')
-    cultura =  models.CharField(name='Cultura',max_length=45,choices=CULTURAS_CHOICE,help_text='Qual plantação foi contaminada?')
+    praga = models.CharField(max_length=40,choices=lista_praga,help_text='Selecione qual o tipo de praga esta contaminando.')
+    cultura =  models.CharField(name='Cultura',max_length=45,choices=lista_cultura,help_text='Qual plantação foi contaminada?')
     status = models.CharField(verbose_name='Controlada?', max_length=45, choices=CONTROLE_CHOICE,help_text='A praga esta controlada?')
     Nome_propriedade = models.CharField(name='Nome da Propriedade afetada',max_length=60,help_text='Nome da propriedade que esta sendo contaminada.')
     prejuizo=models.DecimalField(name='Total do prejuizo R$',max_digits=20, decimal_places=2,default=0.0,help_text='qual o valor do prejuizo?')
@@ -61,17 +72,3 @@ class Tb_Registros(Base):
         verbose_name_plural = "Tabela de Registros"
     def __str__(self):
         return self.Usuário
-
-
-
-class TbPragas(models.Model):
-    id_praga = models.AutoField(primary_key=True)
-    cultura = models.CharField(max_length=45, blank=True, null=True)
-    especie = models.CharField(max_length=45, blank=True, null=True)
-    nome_comum = models.CharField(max_length=45)
-    nome_comum2 = models.CharField(max_length=45)
-
-    class Meta:
-
-        verbose_name = "Tabela de Praga"
-        verbose_name_plural = "Tabela de Pragas"
